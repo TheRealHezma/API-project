@@ -1,6 +1,8 @@
 // backend/routes/api/users.js
 const express = require('express')
 const router = express.Router();
+// const bcrypt = require('bcryptjs'); //added this line
+// const { User } = require('../../db/models'); //added this too
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const validateSignup = [
@@ -28,6 +30,7 @@ router.post(
     '/',
     validateSignup,
     async (req, res) => {
+
         const { email, password, username } = req.body;
         const hashedPassword = bcrypt.hashSync(password);
         const user = await User.create({ email, username, hashedPassword });
@@ -36,12 +39,14 @@ router.post(
             id: user.id,
             email: user.email,
             username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
         };
 
         await setTokenCookie(res, safeUser);
 
         return res.json({
-            user: safeUser
+            user: safeUser,
         });
     }
 );

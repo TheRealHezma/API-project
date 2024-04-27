@@ -28,6 +28,7 @@ const setTokenCookie = (res, user) => {
         secure: isProduction,
         sameSite: isProduction && "Lax"
     });
+    // /home/hezma / appacc / aa12 / aa12 - authenticate - me / project / backend / routes / api
 
     return token;
 };
