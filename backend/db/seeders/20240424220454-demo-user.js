@@ -1,3 +1,4 @@
+//seeder/demo-user
 'use strict';
 
 const { User } = require('../models');
@@ -14,17 +15,25 @@ module.exports = {
       {
         email: 'demo@user.io',
         username: 'Demo-lition',
-        hashedPassword: bcrypt.hashSync('password')
+        hashedPassword: bcrypt.hashSync('password'),
+        firstName: "Hemza",
+        lastName: 'Mansour',
       },
       {
         email: 'user1@user.io',
         username: 'FakeUser1',
-        hashedPassword: bcrypt.hashSync('password2')
+        hashedPassword: bcrypt.hashSync('password2'),
+        firstName: "Cristy",
+        lastName: 'Kuhar',
+
       },
       {
         email: 'user2@user.io',
         username: 'FakeUser2',
-        hashedPassword: bcrypt.hashSync('password3')
+        hashedPassword: bcrypt.hashSync('password3'),
+        firstName: "Pier",
+        lastName: 'Mansour',
+
       }
     ], { validate: true });
   },
