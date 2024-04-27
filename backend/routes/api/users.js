@@ -1,8 +1,10 @@
 // backend/routes/api/users.js
 const express = require('express')
 const router = express.Router();
-// const bcrypt = require('bcryptjs'); //added this line
-// const { User } = require('../../db/models'); //added this too
+const bcrypt = require('bcryptjs'); //added this line
+const { User } = require('../../db/models'); //added this too
+const { setTokenCookie, restoreUser } = require('../../utils/auth');//added this too
+
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const validateSignup = [
@@ -13,8 +15,8 @@ const validateSignup = [
     check('username')
         .exists({ checkFalsy: true })
         .isLength({ min: 4 })
-        .withMessage('Please provide a username with at least 4 characters.'),
-    check('username')
+        .withMessage('Please provide a username with at least 4 characters.')//,
+        // check('username') //there is a commented out comma on the upper line
         .not()
         .isEmail()
         .withMessage('Username cannot be an email.'),
@@ -31,9 +33,9 @@ router.post(
     validateSignup,
     async (req, res) => {
 
-        const { email, password, username } = req.body;
+        const { email, password, username, firstName, lastName } = req.body;
         const hashedPassword = bcrypt.hashSync(password);
-        const user = await User.create({ email, username, hashedPassword });
+        const user = await User.create({ email, username, hashedPassword, firstName, lastName });
 
         const safeUser = {
             id: user.id,
