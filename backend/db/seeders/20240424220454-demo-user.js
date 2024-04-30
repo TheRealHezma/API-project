@@ -34,7 +34,16 @@ module.exports = {
         firstName: "Pier",
         lastName: 'Mansour',
 
+      },
+      {
+        email: 'user3@user.io',
+        username: 'FakeUser3',
+        hashedPassword: bcrypt.hashSync('password4'),
+        firstName: "Piper",
+        lastName: 'Mansour',
+
       }
+
     ], { validate: true });
   },
 
