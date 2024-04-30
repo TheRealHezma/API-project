@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     url: {
-      type: DataTypes.Sting
+      type: DataTypes.STRING
     },
     createdAt: {
       type: DataTypes.DATE

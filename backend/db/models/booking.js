@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
-        allownNull: false,
+        allowNull: false,
         references: {
           model: 'User',
           key: 'id'
@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isDate: true,
-          isBefore: function (value) {
+          isBeforeEndDate(value) {
+            if (!this.endDate) return;
             return value < this.endDate;
           }
         }
@@ -42,12 +43,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isDate: true,
-          isAfter: function (value) {
+          isAfterStartDate(value) {
+            if (!this.startDate) return;
             return value > this.startDate;
           }
         }
-      },
-      createdAt: {
+      }, createdAt: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
