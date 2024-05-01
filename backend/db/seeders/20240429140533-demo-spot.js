@@ -23,7 +23,8 @@ module.exports = {
         description: "The happiest place on earth!",
         price: 204,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        previewImage: "http//imageurl.com",
       },
       {
         ownerId: 2,
@@ -37,7 +38,8 @@ module.exports = {
         description: "The happiest place on earth!",
         price: 202,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        previewImage: "https//imageurl.com",
       },
       {
         ownerId: 3,
@@ -51,7 +53,8 @@ module.exports = {
         description: "The happiest place on earth!",
         price: 203,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        previewImage: "https//imageurl.com",
       },
       {
         ownerId: 4,
@@ -65,7 +68,8 @@ module.exports = {
         description: "The happiest place on earth!",
         price: 204,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        previewImage: "https//imageurl.com",
       }
     ], { validate: true });
   },
