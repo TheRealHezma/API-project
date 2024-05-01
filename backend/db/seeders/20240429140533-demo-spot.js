@@ -25,6 +25,8 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         previewImage: "http//imageurl.com",
+        avgRating: 5
+
       },
       {
         ownerId: 2,
@@ -40,6 +42,8 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         previewImage: "https//imageurl.com",
+        avgRating: 5
+
       },
       {
         ownerId: 3,
@@ -55,6 +59,8 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         previewImage: "https//imageurl.com",
+        avgRating: 5
+
       },
       {
         ownerId: 4,
@@ -70,6 +76,8 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         previewImage: "https//imageurl.com",
+        avgRating: 5
+
       }
     ], { validate: true });
   },
