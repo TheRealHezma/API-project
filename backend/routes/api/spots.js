@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router();
 const { User, Spot, Booking, Review, ReviewImage, SpotImage } = require('../../db/models');
-
+const { requireAuth } = require('../../utils/auth')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validationResult } = require('express-validator');
@@ -39,6 +39,42 @@ const validateSpotCreation = [
         .withMessage('Price per day is required'),
     handleValidationErrors
 ];
+// Get spots of current user
+router.get('/current', requireAuth, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const spots = await Spot.findAll({ where: { ownerId: userId } });
+
+        if (spots.length > 0) {
+            res.json({ spots });
+        } else {
+            res.json({ message: 'No spots found for the logged-in user' });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+
+// Add image to spot based on spot id
+router.post('/:spotId/images', async (req, res) => {
+    const spotId = parseInt(req.params.spotId);
+    const userId = parseInt(req.user.userId);
+    const { url, preview } = req.body;
+
+
+    const spot = await Spot.findOne({ where: { id: spotId, ownerId: userId } });
+
+    if (!spot) {
+        return res.status(404).json({ message: "Spot not found or doesn't belong to the current user" });
+    }
+
+
+    const newImage = await SpotImage.create({ url, preview, spotId });
+
+    return res.status(200).json(newImage);
+});
 
 
 // create new spot
@@ -137,23 +173,6 @@ router.get('/:spotId', async (req, res) => {
         res.status(404).json({ message: "Spot couldn't be found" });
     }
 });
-
-// Get spots of current user
-router.get('/current', async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const spots = await Spot.findAll({ where: { ownerId: userId } });
-
-        if (spots.length > 0) {
-            res.json({ spots });
-        } else {
-            res.json({ message: 'No spots found for the logged-in user' });
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-})
 
 
 // GET all spots
