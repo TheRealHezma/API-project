@@ -56,13 +56,39 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 })
 
+// Update a spot based on spot id
+router.put('/:spotId', requireAuth, validateSpotCreation, async (req, res) => {
+    const userId = req.user.id;
+    const { spotId } = req.params;
+
+    const spot = await Spot.findOne({ where: { id: spotId, ownerId: userId } });
+
+    if (!spot) {
+        return res.status(404).json({ message: "Spot could not be found" });
+    }
+
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+    await spot.update({
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price
+    });
+
+    return res.status(200).json(spot);
+});
 
 // Add image to spot based on spot id
-router.post('/:spotId/images', async (req, res) => {
-    const spotId = parseInt(req.params.spotId);
-    const userId = parseInt(req.user.userId);
+router.post('/:spotId/images', requireAuth, async (req, res) => {
+    const userId = req.user.id;
+    const { spotId } = req.params;
     const { url, preview } = req.body;
-
 
     const spot = await Spot.findOne({ where: { id: spotId, ownerId: userId } });
 
