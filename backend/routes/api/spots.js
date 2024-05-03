@@ -155,18 +155,18 @@ router.post('/:spotId/reviews', requireAuth, spotExists, validateSpot, async (re
         res.status(201).json({
             id: createdReview.id,
             userId: createdReview.userId,
-            spotId: parseInt(createdReview.spotId),
+            spotId: createdReview.spotId,
             review: createdReview.review,
             stars: createdReview.stars,
             createdAt: createdReview.createdAt,
             updatedAt: createdReview.updatedAt
         });
-    } catch (error) {
-        // Handle any errors
-        console.error('Error creating review:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
+        // } catch (error) {
+        //     console.error(error);
+        //     res.status(404).json({ message: 'Hitting an error' });
+        // }
+    });
+
 
 
 // Delete a spot based on spot id
