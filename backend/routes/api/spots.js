@@ -126,7 +126,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
     res.status(201).json({
         id: createdReview.id,
         userId: createdReview.userId,
-        spotId: parseInt(createdReview.spotId),
+        spotId: createdReview.spotId,
         review: createdReview.review,
         stars: createdReview.stars,
         createdAt: createdReview.createdAt,
