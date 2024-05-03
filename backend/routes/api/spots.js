@@ -235,21 +235,5 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-//Get spots of current user
-// router.get('//current', async (req, res) => {
-//     try {
-//         const userId = req.user.id;
-//         const spots = await Spot.findAll({ where: { ownerId: userId } });
-
-//         if (spots.length > 0) {
-//           res.json({ spots });
-//         } else {
-//           res.json({ message: 'No spots found for the logged-in user' });
-//         }
-//       } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ error: 'Internal server error' });
-//       }
-// })
 
 module.exports = router;

@@ -1,11 +1,12 @@
 // backend/routes/api/reviews.js
 const express = require('express')
 const router = express.Router();
-const { User, Spot, Booking, Review, ReviewImage, SpotImage } = require('../../db/models');
+const { User, Spot, Booking, Review, Reviewimage, SpotImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validationResult } = require('express-validator');
+const { Op } = require('sequelize');
 
 // const validateReviews = [
 //     check('address')
@@ -42,20 +43,17 @@ const { validationResult } = require('express-validator');
 
 // Get all reviews of the current user
 router.get('/current', requireAuth, async (req, res) => {
-    console.log("HHHHHHHHHHEEEEEEEEEEEEEELLLLLLLLOOOOOOOOOOOO")
-    try {
-        const userId = req.user.id;
-        const review = await Review.findAll({ where: { ownerId: userId } });
+    const userId = req.user.id;
+    const reviews = await Review.findAll({
+        where: { userId },
+        include: [
+            { model: User, as: "User", attributes: ['id', 'firstName', 'lastName'] },
+            { model: Spot, attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'] },
+            { model: Reviewimage, attributes: ['id', 'url'] }
+        ]
+    });
+    res.status(200).json({ Reviews: reviews });
+});
 
-        if (review.length > 0) {
-            res.json({ review });
-        } else {
-            res.json({ message: 'No spots found for the logged-in user' });
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-})
 
 module.exports = router;
