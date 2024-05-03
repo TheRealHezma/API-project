@@ -88,6 +88,36 @@ router.get('/current', requireAuth, async (req, res) => {
     res.status(200).json({ Reviews: reviews });
 });
 
+//edit a review
+router.put('/:reviewId', requireAuth, async (req, res) => {
+    const { reviewId } = req.params;
+    const { review, stars } = req.body;
+    // Check if the review exists
+    const existingReview = await Review.findByPk(reviewId);
+    if (!existingReview) {
+        return res.status(404).json({ message: "Review couldn't be found" });
+    }
+
+    // Validate the request body
+    const errors = {};
+    if (!review || typeof review !== 'string' || review.trim() === '') {
+        errors.review = "Review text is required";
+    }
+    if (!stars || isNaN(stars) || stars < 1 || stars > 5) {
+        errors.stars = "Stars must be an integer from 1 to 5";
+    }
+
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ message: "Bad Request", errors });
+    }
+
+    // Update the review
+    await existingReview.update({ review, stars });
+
+    // Return the updated review
+    res.status(200).json(existingReview);
+
+});
 
 
 module.exports = router;

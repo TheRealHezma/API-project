@@ -266,6 +266,8 @@ router.post('/', validateSpotCreation, async (req, res) => {
     }
 });
 
+
+
 //Get spots based on id
 router.get('/:spotId', async (req, res) => {
     try {
