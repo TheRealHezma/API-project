@@ -97,6 +97,48 @@ router.get('/:spotId/reviews', async (req, res) => {
     }
 });
 
+//create review for spot based on spotId
+router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+    const { spotId } = req.params;
+    const { review, stars } = req.body;
+    const userId = req.user.id;
+
+    try {
+
+        const existingReview = await Review.findOne({
+            where: {
+                userId: userId,
+                spotId: spotId
+            }
+        });
+
+        if (existingReview) {
+            return res.status(500).json({ message: "User already has a review for this spot" });
+        }
+
+        const createdReview = await Review.create({
+            userId: userId,
+            spotId: spotId,
+            review: review,
+            stars: stars
+        });
+
+        res.status(201).json({
+            id: createdReview.id,
+            userId: createdReview.userId,
+            spotId: parseInt(createdReview.spotId),
+            review: createdReview.review,
+            stars: createdReview.stars,
+            createdAt: formatDate(createdReview.createdAt),
+            updatedAt: formatDate(createdReview.updatedAt)
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(404).json({ message: 'Internal server error' });
+    }
+});
+
+
 
 // Delete a spot based on spot id
 router.delete('/:spotId', requireAuth, async (req, res) => {
@@ -175,7 +217,6 @@ router.post('/', validateSpotCreation, async (req, res) => {
     const { ownerId, address, city, state, country, lat, lng, name, description, price } = req.body;
 
     try {
-        // Create the spot in the database
         const newSpot = await Spot.create({
             ownerId,
             address,
@@ -189,10 +230,8 @@ router.post('/', validateSpotCreation, async (req, res) => {
             price
         });
 
-        // Respond with new spot
         res.status(201).json(newSpot);
     } catch (error) {
-        // If an error occurs, respond with an error message and status code 500
         console.error("Error:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
@@ -258,24 +297,8 @@ router.get('/:spotId', async (req, res) => {
     }
 });
 
-//create review for spot based on spotId
-router.post('/:spotId/reviews', requireAuth, async (req, res) => {
-    const userId = req.user.id;
-    const { spotId } = req.params;
-    const { review, stars } = req.body;
 
-    const spot = await Spot.findOne({ where: { id: spotId, ownerId: userId } });
-    if (!spot) {
-        return res.status(404).json({ message: "Spot not found or doesn't belong to the current user" });
-    }
-
-    const newReview = await Review.create({ stars, review, spotId });
-
-    return res.status(200).json(newReview)
-
-})
-
-//create review for spot based on spotId
+// //create review for spot based on spotId
 // router.post('/:spotId/reviews', requireAuth, async (req, res) => {
 //     const { spotId } = req.params;
 //     const { review, stars } = req.body;
@@ -312,7 +335,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res) => {
 //         });
 //     } catch (error) {
 //         console.error(error);
-//         res.status(500).json({ message: 'Internal server error' });
+//         res.status(404).json({ message: 'Internal server error' });
 //     }
 // });
 
