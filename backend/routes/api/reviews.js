@@ -92,13 +92,12 @@ router.get('/current', requireAuth, async (req, res) => {
 router.put('/:reviewId', requireAuth, async (req, res) => {
     const { reviewId } = req.params;
     const { review, stars } = req.body;
-    // Check if the review exists
+
     const existingReview = await Review.findByPk(reviewId);
     if (!existingReview) {
         return res.status(404).json({ message: "Review couldn't be found" });
     }
 
-    // Validate the request body
     const errors = {};
     if (!review || typeof review !== 'string' || review.trim() === '') {
         errors.review = "Review text is required";
@@ -111,12 +110,31 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
         return res.status(400).json({ message: "Bad Request", errors });
     }
 
-    // Update the review
     await existingReview.update({ review, stars });
 
-    // Return the updated review
     res.status(200).json(existingReview);
 
+});
+
+router.delete('/:reviewId', requireAuth, async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+
+        // Check if the review exists
+        const existingReview = await Review.findByPk(reviewId);
+        if (!existingReview) {
+            return res.status(404).json({ message: "Review couldn't be found" });
+        }
+
+        // Delete the review
+        await existingReview.destroy();
+
+        // Return success message
+        res.status(200).json({ message: "Review deleted successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 
