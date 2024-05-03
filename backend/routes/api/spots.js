@@ -108,6 +108,32 @@ router.get('/:spotId/reviews', async (req, res) => {
     }
 });
 
+router.get('/:spotId/bookings', async (req, res) => {
+    const { spotId } = req.params;
+
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+        return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+
+    const bookings = await Booking.findAll({
+        where: { spotId },
+        attributes: ['spotId', 'startDate', 'endDate'],
+        include: [{ model: User, attributes: ['id'] }] // Assuming there's a User model
+    });
+
+    const filteredBookings = bookings.filter(booking => booking.User.id !== spot.ownerId);
+
+    const formattedBookings = filteredBookings.map(booking => ({
+        spotId: booking.spotId,
+        startDate: booking.startDate,
+        endDate: booking.endDate
+    }));
+
+    res.status(200).json({ Bookings: formattedBookings });
+});
+
+
 // Middleware to check if the spot exists
 async function spotExists(req, res, next) {
     const { spotId } = req.params;
