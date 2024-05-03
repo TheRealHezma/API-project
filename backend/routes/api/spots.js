@@ -39,6 +39,7 @@ const validateSpotCreation = [
         .withMessage('Price per day is required'),
     handleValidationErrors
 ];
+
 // Get spots of current user
 router.get('/current', requireAuth, async (req, res) => {
     try {
