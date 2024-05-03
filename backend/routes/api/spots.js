@@ -131,41 +131,41 @@ router.post('/:spotId/reviews', requireAuth, spotExists, validateSpot, async (re
     const { review, stars } = req.body;
     const userId = req.user.id;
 
-    try {
-        // Check if the user already has a review for this spot
-        const existingReview = await Review.findOne({
-            where: {
-                userId: userId,
-                spotId: spotId
-            }
-        });
-
-        if (existingReview) {
-            return res.status(400).json({ message: "User already has a review for this spot" });
-        }
-
-        // Create a new review
-        const createdReview = await Review.create({
+    //   try {
+    // Check if the user already has a review for this spot
+    const existingReview = await Review.findOne({
+        where: {
             userId: userId,
-            spotId: spotId,
-            review: review,
-            stars: stars
-        });
-
-        res.status(201).json({
-            id: createdReview.id,
-            userId: createdReview.userId,
-            spotId: createdReview.spotId,
-            review: createdReview.review,
-            stars: createdReview.stars,
-            createdAt: createdReview.createdAt,
-            updatedAt: createdReview.updatedAt
-        });
-        // } catch (error) {
-        //     console.error(error);
-        //     res.status(404).json({ message: 'Hitting an error' });
-        // }
+            spotId: spotId
+        }
     });
+
+    if (existingReview) {
+        return res.status(400).json({ message: "User already has a review for this spot" });
+    }
+
+    // Create a new review
+    const createdReview = await Review.create({
+        userId: userId,
+        spotId: spotId,
+        review: review,
+        stars: stars
+    });
+
+    res.status(201).json({
+        id: createdReview.id,
+        userId: createdReview.userId,
+        spotId: createdReview.spotId,
+        review: createdReview.review,
+        stars: createdReview.stars,
+        createdAt: createdReview.createdAt,
+        updatedAt: createdReview.updatedAt
+    });
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(404).json({ message: 'Hitting an error' });
+    // }
+});
 
 
 
