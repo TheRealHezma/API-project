@@ -6,7 +6,7 @@ const { requireAuth } = require('../../utils/auth')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validationResult } = require('express-validator');
-
+const { Op } = require('sequelize');
 const validateSpotCreation = [
     check('address')
         .exists()
@@ -49,7 +49,27 @@ const validateSpot = [
         .withMessage('Stars must be an integer from 1 to 5'),
     handleValidationErrors
 
-]
+];
+
+const validateBookingTime = [
+    check('startDate')
+        .isISO8601()
+        .toDate()
+        .withMessage('Need start date.'),
+    check('endDate')
+        .isISO8601()
+        .toDate()
+        .withMessage(' EndDate cannot be on or before startDate.'),
+    check('endDate')
+        .custom((value, { req }) => {
+            if (new Date(value) <= new Date(req.body.startDate)) {
+                throw new Error('End date cannot be on or before start date.');
+            }
+            return true;
+        }),
+    handleValidationErrors
+];
+
 
 // Get spots of current user
 router.get('/current', requireAuth, async (req, res) => {
@@ -108,6 +128,7 @@ router.get('/:spotId/reviews', async (req, res) => {
     }
 });
 
+//get bookings based on spot id
 router.get('/:spotId/bookings', async (req, res) => {
     const { spotId } = req.params;
 
@@ -293,6 +314,67 @@ router.post('/', validateSpotCreation, async (req, res) => {
 });
 
 
+// // Middleware if spot exists
+// const spotExists = async (req, res, next) => {
+//     try {
+//         const spotId = req.params.spotId;
+//         const spot = await Spot.findByPk(spotId);
+//         if (!spot) {
+//             const error = new Error("Spot not found");
+//             error.status = 404;
+//             throw error;
+//         }
+//         next();
+//     } catch (error) {
+//         next(error);
+//     }
+//};
+// Route for creating a new booking for a spot
+router.post('/:spotId/bookings', requireAuth, spotExists, validateBookingTime, async (req, res) => {
+    const spotId = req.params.spotId;
+    const { startDate, endDate } = req.body;
+
+    const newBooking = await Booking.build({
+        userId: req.user.id,
+        spotId: spotId,
+        startDate: startDate,
+        endDate: endDate
+    });
+
+    await newBooking.validate();
+
+    const conflicts = await Booking.findAll({
+        where: {
+            spotId: spotId,
+            startDate: { [Op.lte]: newBooking.endDate },
+            endDate: { [Op.gte]: newBooking.startDate }
+        }
+    });
+
+    if (conflicts.length !== 0) {
+        return res.status(403).json({
+            message: "This spot is already booked for the specified dates",
+            conflicts: conflicts.map(conflict => ({
+                id: conflict.id,
+                startDate: conflict.startDate,
+                endDate: conflict.endDate
+            }))
+        });
+    }
+
+    await newBooking.save();
+
+    return res.status(201).json({
+        id: newBooking.id,
+        userId: newBooking.userId,
+        spotId: newBooking.spotId,
+        startDate: newBooking.startDate,
+        endDate: newBooking.endDate,
+        createdAt: newBooking.createdAt,
+        updatedAt: newBooking.updatedAt
+    });
+});
+
 
 //Get spots based on id
 router.get('/:spotId', async (req, res) => {
@@ -371,5 +453,6 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 module.exports = router;
