@@ -57,6 +57,47 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 })
 
+// Get all reviews by spotId
+// router.get('/:spotId/reviews', async (req, res) => {
+//     try {
+//         const { spotId } = req.params;
+//         const reviews = await Review.findAll({
+//             where: { spotId },
+//             attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
+//             include: [
+//                 { model: User, attributes: ['id', 'firstName', 'lastName'] },
+//                 { model: ReviewImage, attributes: ['id', 'url'] }
+//             ]
+//         });
+
+//         const format = reviews.map(review => ({
+//             id: review.id,
+//             userId: review.userId,
+//             spotId: review.spotId,
+//             review: review.review,
+//             stars: review.stars,
+//             createdAt: review.createdAt,
+//             updatedAt: review.updatedAt,
+//             User: {
+//                 id: review.User.id,
+//                 firstName: review.User.firstName,
+//                 lastName: review.User.lastName
+//             },
+//             ReviewImages: review.ReviewImages.map(image => ({
+//                 id: image.id,
+//                 url: image.url
+//             }))
+//         }));
+
+//         res.status(200).json({ Reviews: format });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// });
+
+
 // Delete a spot based on spot id
 router.delete('/:spotId', requireAuth, async (req, res) => {
     const userId = req.user.id;
@@ -217,6 +258,46 @@ router.get('/:spotId', async (req, res) => {
     }
 });
 
+//create review for spot based on spotId
+// router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+//     const { spotId } = req.params;
+//     const { review, stars } = req.body;
+//     const userId = req.user.id;
+
+//     try {
+
+//         const existingReview = await Review.findOne({
+//             where: {
+//                 userId: userId,
+//                 spotId: spotId
+//             }
+//         });
+
+//         if (existingReview) {
+//             return res.status(500).json({ message: "User already has a review for this spot" });
+//         }
+
+//         const createdReview = await Review.create({
+//             userId: userId,
+//             spotId: spotId,
+//             review: review,
+//             stars: stars
+//         });
+
+//         res.status(201).json({
+//             id: createdReview.id,
+//             userId: createdReview.userId,
+//             spotId: parseInt(createdReview.spotId),
+//             review: createdReview.review,
+//             stars: createdReview.stars,
+//             createdAt: formatDate(createdReview.createdAt),
+//             updatedAt: formatDate(createdReview.updatedAt)
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// });
 
 // GET all spots
 router.get('/', async (req, res) => {

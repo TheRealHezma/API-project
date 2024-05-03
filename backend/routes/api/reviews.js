@@ -41,6 +41,39 @@ const { Op } = require('sequelize');
 //     handleValidationErrors
 // ];
 
+// Get all reviews by spotId
+// router.get('/:spotId/reviews', async (req, res) => {
+//     console.log("HHHHHHHHHHEEEEEEEEEEEEELLLLLLLLLOOOOOOOOO")
+//     try {
+//         const { spotId } = req.params;
+
+//         // Find spot by spotId
+//         const spot = await Spot.findByPk(spotId);
+
+//         // If spot not found, return 404 error
+//         if (!spot) {
+//             return res.status(404).json({ message: "Spot couldn't be found" });
+//         }
+
+//         // Find all reviews for the spot
+//         const reviews = await Review.findAll({
+//             where: { spotId },
+//             include: [
+//                 { model: User, attributes: ['id', 'firstName', 'lastName'] },
+//                 { model: ReviewImage, attributes: ['id', 'url'] }
+//             ],
+//             attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt']
+//         });
+
+//         // Return reviews with user and review image details
+//         return res.json({ Reviews: reviews });
+
+//     } catch (error) {
+//         console.error('Error:', error);
+//         return res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
+
 // Get all reviews of the current user
 router.get('/current', requireAuth, async (req, res) => {
     const userId = req.user.id;
@@ -54,6 +87,7 @@ router.get('/current', requireAuth, async (req, res) => {
     });
     res.status(200).json({ Reviews: reviews });
 });
+
 
 
 module.exports = router;
