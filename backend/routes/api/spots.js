@@ -1,7 +1,7 @@
 // backend/routes/api/spots.js
 const express = require('express')
 const router = express.Router();
-const { User, Spot, Booking, Review, ReviewImage, SpotImage } = require('../../db/models');
+const { User, Spot, Booking, Review, Reviewimage, SpotImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth')
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -167,11 +167,10 @@ router.get('/:spotId/reviews', async (req, res) => {
     const reviews = await Review.findAll({
         where: { spotId: spotId, },
         include: [
-            { model: ReviewImage, attributes: ['id', 'url'], },
+            { model: Reviewimage, attributes: ['id', 'url'], },
             { model: User, attributes: ['id', 'firstName', 'lastName'] }
         ]
     });
-
     res.status(200).json({ reviews });
 });
 
@@ -470,189 +469,69 @@ router.get('/:spotId', async (req, res) => {
     }
 });
 
-// router.get('/', validateQueryFilters, async (req, res) => {
-//     const { page = 1, size = 20 } = req.query;
-
-//     const pageNumber = parseInt(page);
-//     const pageSize = parseInt(size);
-//     const offset = (pageNumber - 1) * pageSize;
-//     const filter = buildFilter(req.query); // This line builds the filter based on the query parameters
-//     const spots = await Spot.findAll({
-//         attributes: [
-//             'id',
-//             'ownerId',
-//             'address',
-//             'city',
-//             'state',
-//             'country',
-//             'lat',
-//             'lng',
-//             'name',
-//             'description',
-//             'price',
-//             'createdAt',
-//             'updatedAt',
-//         ],
-//         include: [
-//             {
-//                 model: Review,
-//                 attributes: ['stars'],
-//                 required: false,
-//             },
-//         ],
-//         group: ['Spot.id'],
-//         where: filter,
-//         limit: pageSize,
-//         offset: offset,
-//     });
-
-//     const filteredSpots = await Promise.all(
-//         spots.map(async (spot) => {
-//             const { Reviews, previewImage, ...spotData } = spot.toJSON();
-//             const previewImageFind = await SpotImage.findOne({
-//                 attributes: ['url'],
-//                 where: {
-//                     spotId: spotData.id,
-//                     preview: true,
-//                 },
-//                 as: 'previewImage',
-//             });
-//             const responseSpot = {
-//                 id: spotData.id,
-//                 ownerId: spotData.ownerId,
-//                 address: spotData.address,
-//                 city: spotData.city,
-//                 state: spotData.state,
-//                 country: spotData.country,
-//                 lat: Number(spotData.lat),
-//                 lng: Number(spotData.lng),
-//                 name: spotData.name,
-//                 description: spotData.description,
-//                 price: Number(spotData.price),
-//                 createdAt: spotData.createdAt,
-//                 updatedAt: spotData.updatedAt,
-//             };
-//             const avgRating = await calculateAverageRating(spot.id);
-//             if (avgRating > 0 && avgRating !== null) {
-//                 responseSpot.avgRating = avgRating;
-//             } else {
-//                 responseSpot.avgRating = 'Spot has no rating';
-//             }
-//             if (previewImageFind) {
-//                 responseSpot.previewImage = previewImageFind.url;
-//             } else {
-//                 responseSpot.previewImage = 'Spot has no preview image';
-//             }
-//             return responseSpot;
-//         })
-//     );
-
-//     return res.json({
-//         Spots: filteredSpots,
-//         page: pageNumber,
-//         size: pageSize,
-//     });
-// });
 
 //get all spots
-router.get('/', async (req, res) => {
+// router.get('/', async (req, res) => {
+//     try {
+//         const spots = await Spot.findAll();
+
+//         if (spots.length > 0) {
+//             res.json({ spots });
+//         } else {
+//             res.json({ message: 'No spots found' });
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// });
+
+// Route to get spots with query parameter filters
+
+router.get('/', validateQueryFilters, async (req, res) => {
+    let { page, size } = req.query;
+    if (!page) page = 1;
+    if (!size) size = 10;
+
+    const pagination = {
+        limit: parseInt(size),
+        offset: (parseInt(page) - 1) * parseInt(size)
+    };
+
     try {
-        const spots = await Spot.findAll();
+        const spots = await Spot.findAll({
+            ...pagination
+        });
 
         if (spots.length > 0) {
-            res.json({ spots });
+            res.status(200).json({ Spots: spots, page: page, size: size });
         } else {
-            res.json({ message: 'No spots found' });
+            res.status(404).json({ message: 'No spots found' });
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        if (error.name === 'SequelizeValidationError') {
+            res.status(404).json({
+                message: 'Validation error',
+                errors: {
+                    page: "Page must be greater than or equal to 1",
+                    size: "Size must be greater than or equal to 1",
+                    maxLat: "Maximum latitude is invalid",
+                    minLat: "Minimum latitude is invalid",
+                    minLng: "Maximum longitude is invalid",
+                    maxLng: "Minimum longitude is invalid",
+                    minPrice: "Minimum price must be greater than or equal to 0",
+                    maxPrice: "Maximum price must be greater than or equal to 0"
+                }
+            });
+        } else {
+            console.error(error);
+            res.status(500).json({ message: 'ERR' });
+        }
     }
 });
 
-// router.get('/', validateQueryFilters, async (req, res) => {
-//     const { page = 1, size = 20 } = req.query;
 
-//     const pageNumber = parseInt(page);
-//     const pageSize = parseInt(size);
-//     const offset = (pageNumber - 1) * pageSize;
-//     const filter = buildFilter(req.query);
-//     const spots = await Spot.findAll({
-//         attributes: [
-//             'id',
-//             'ownerId',
-//             'address',
-//             'city',
-//             'state',
-//             'country',
-//             'lat',
-//             'lng',
-//             'name',
-//             'description',
-//             'price',
-//             'createdAt',
-//             'updatedAt',
-//         ],
-//         include: [
-//             {
-//                 model: Review,
-//                 attributes: ['stars'],
-//                 required: false,
-//             },
-//         ],
-//         group: ['Spot.id'],
-//         where: filter,
-//         limit: pageSize,
-//         offset: offset,
-//     });
 
-//     const filteredSpots = await Promise.all(
-//         spots.map(async (spot) => {
-//             const { Reviews, previewImage, ...spotData } = spot.toJSON();
-//             const previewImageFind = await SpotImage.findOne({
-//                 attributes: ['url'],
-//                 where: {
-//                     spotId: spotData.id,
-//                     preview: true,
-//                 },
-//                 as: 'previewImage',
-//             });
-//             const responseSpot = {
-//                 id: spotData.id,
-//                 ownerId: spotData.ownerId,
-//                 address: spotData.address,
-//                 city: spotData.city,
-//                 state: spotData.state,
-//                 country: spotData.country,
-//                 lat: Number(spotData.lat),
-//                 lng: Number(spotData.lng),
-//                 name: spotData.name,
-//                 description: spotData.description,
-//                 price: Number(spotData.price),
-//                 createdAt: spotData.createdAt,
-//                 updatedAt: spotData.updatedAt,
-//             };
-//             const avgRating = await calculateAverageRating(spot.id);
-//             if (avgRating > 0 && avgRating !== null) {
-//                 responseSpot.avgRating = avgRating;
-//             } else {
-//                 responseSpot.avgRating = 'Spot has no rating';
-//             }
-//             if (previewImageFind) {
-//                 responseSpot.previewImage = previewImageFind.url;
-//             } else {
-//                 responseSpot.previewImage = 'Spot has no preview image';
-//             }
-//             return responseSpot;
-//         })
-//     );
-
-//     return res.json({
-//         Spots: filteredSpots,
-//         page: pageNumber,
-//         size: pageSize,
-//     });
-// });
 
 
 module.exports = router;
