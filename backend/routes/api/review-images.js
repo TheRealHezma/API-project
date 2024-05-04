@@ -1,3 +1,4 @@
+
 // backend/routes/api/spots.js
 const express = require('express')
 const router = express.Router();
@@ -16,12 +17,12 @@ router.delete('/:imageId', requireAuth, async (req, res, next) => {
         const spotImage = await SpotImage.findByPk(imageId);
 
         if (!spotImage) {
-            return res.status(404).json({ message: "Spot image not found" });
+            return res.status(404).json({ message: "Review image not found" });
         }
 
         await spotImage.destroy();
 
-        return res.status(200).json({ message: "Spot image deleted successfully" });
+        return res.status(200).json({ message: "Review image deleted successfully" });
     } catch (error) {
         next(error);
     }

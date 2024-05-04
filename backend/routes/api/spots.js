@@ -263,7 +263,7 @@ router.post('/:spotId/reviews', requireAuth, spotExists, validateSpot, async (re
     });
 
     if (existingReview) {
-        return res.status(400).json({ message: "User already has a review for this spot" });
+        return res.status(500).json({ message: "User already has a review for this spot" });
     }
 
     // Create a new review
@@ -426,7 +426,7 @@ router.post('/:spotId/bookings', requireAuth, spotExists, validateBookingTime, a
 
     await newBooking.save();
 
-    return res.status(201).json({
+    return res.status(200).json({
         id: newBooking.id,
         userId: newBooking.userId,
         spotId: newBooking.spotId,
