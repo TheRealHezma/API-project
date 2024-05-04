@@ -487,7 +487,6 @@ router.get('/:spotId', async (req, res) => {
 // });
 
 // get spots with query parameter filters
-
 router.get('/', validateQueryFilters, async (req, res) => {
     let { page, size } = req.query;
     if (!page) page = 1;
@@ -523,6 +522,48 @@ router.get('/', validateQueryFilters, async (req, res) => {
 });
 
 
+// router.get('/', validateQueryFilters, async (req, res) => {
+//     let { page, size } = req.query;
+//     if (!page) page = 1;
+//     if (!size) size = 10;
+
+//     const pagination = {
+//         limit: parseInt(size),
+//         offset: (parseInt(page) - 1) * parseInt(size)
+//     };
+
+//     // try {
+//     const spots = await Spot.findAll({
+//         ...pagination
+//     });
+
+//     // if (spots.length > 0) {
+//     res.status(200).json({ Spots: spots, page: page, size: size });
+//     //     } else {
+//     //         res.status(404).json({ message: 'No spots found' });
+//     //     }
+//     // } catch (error) {
+//     //     if (error.title === 'SequelizeValidationError') {
+//     //         res.status(404).json({
+//     //             message: 'Validation error',
+//     //             errors: {
+//     //                 page: "Page must be greater than or equal to 1",
+//     //                 size: "Size must be greater than or equal to 1",
+//     //                 maxLat: "Maximum latitude is invalid",
+//     //                 minLat: "Minimum latitude is invalid",
+//     //                 minLng: "Maximum longitude is invalid",
+//     //                 maxLng: "Minimum longitude is invalid",
+//     //                 minPrice: "Minimum price must be greater than or equal to 0",
+//     //                 maxPrice: "Maximum price must be greater than or equal to 0"
+//     //             }
+//     //         });
+//     //     } else {
+//     //         console.error(error);
+//     //         res.status(500).json({ message: 'ERR' });
+//     //     }
+//     // }
+// }
+// );
 
 
 
