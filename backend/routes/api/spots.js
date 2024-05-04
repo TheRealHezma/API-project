@@ -174,7 +174,7 @@ router.get('/:spotId/reviews', async (req, res) => {
             ]
         });
 
-        const formattedReviews = reviews.map(review => ({
+        const formatRev = reviews.map(review => ({
             id: review.id,
             userId: review.userId,
             spotId: review.spotId,
@@ -193,7 +193,7 @@ router.get('/:spotId/reviews', async (req, res) => {
             }))
         }));
 
-        res.status(200).json({ Reviews: formattedReviews });
+        res.status(200).json({ Reviews: formatRev });
 
     } catch (error) {
         console.error(error);
