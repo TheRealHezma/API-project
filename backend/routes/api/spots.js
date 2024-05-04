@@ -7,6 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validationResult } = require('express-validator');
 const { Op } = require('sequelize');
+
 const validateSpotCreation = [
     check('address')
         .exists()
@@ -70,6 +71,53 @@ const validateBookingTime = [
     handleValidationErrors
 ];
 
+const validationErrors = {
+    message: "Bad Request",
+    errors: {
+        page: "Page must be greater than or equal to 1",
+        size: "Size must be greater than or equal to 1",
+        maxLat: "Maximum latitude is invalid",
+        minLat: "Minimum latitude is invalid",
+        minLng: "Maximum longitude is invalid",
+        maxLng: "Minimum longitude is invalid",
+        minPrice: "Minimum price must be greater than or equal to 0",
+        maxPrice: "Maximum price must be greater than or equal to 0"
+    }
+};
+
+const validateQueryFilters = [
+    check('page')
+        .isInt({ min: 1 })
+        .withMessage(validationErrors.errors.page),
+    check('size')
+        .isInt({ min: 1 })
+        .withMessage(validationErrors.errors.size),
+    check('minLat')
+        .optional({ nullable: true })
+        .isFloat({ min: -90 })
+        .withMessage(validationErrors.errors.minLat),
+    check('maxLat')
+        .optional({ nullable: true })
+        .isFloat({ max: 90 })
+        .withMessage(validationErrors.errors.maxLat),
+    check('minLng')
+        .optional({ nullable: true })
+        .isFloat({ min: -180 })
+        .withMessage(validationErrors.errors.minLng),
+    check('maxLng')
+        .optional({ nullable: true })
+        .isFloat({ max: 180 })
+        .withMessage(validationErrors.errors.maxLng),
+    check('minPrice')
+        .optional({ nullable: true })
+        .isFloat({ min: 0 })
+        .withMessage(validationErrors.errors.minPrice),
+    check('maxPrice')
+        .optional({ nullable: true })
+        .isFloat({ min: 0 })
+        .withMessage(validationErrors.errors.maxPrice),
+    handleValidationErrors
+];
 
 // Get spots of current user
 router.get('/current', requireAuth, async (req, res) => {
@@ -243,7 +291,9 @@ router.put('/:spotId', requireAuth, validateSpotCreation, async (req, res) => {
         return res.status(404).json({ message: "Spot could not be found" });
     }
 
-    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    const { address, city, state, country, name, description, price } = req.body;
+    const lat = parseFloat(req.body.lat);
+    const lng = parseFloat(req.body.lng);
 
     await spot.update({
         address,
@@ -314,21 +364,6 @@ router.post('/', validateSpotCreation, async (req, res) => {
 });
 
 
-// // Middleware if spot exists
-// const spotExists = async (req, res, next) => {
-//     try {
-//         const spotId = req.params.spotId;
-//         const spot = await Spot.findByPk(spotId);
-//         if (!spot) {
-//             const error = new Error("Spot not found");
-//             error.status = 404;
-//             throw error;
-//         }
-//         next();
-//     } catch (error) {
-//         next(error);
-//     }
-//};
 // Route for creating a new booking for a spot
 router.post('/:spotId/bookings', requireAuth, spotExists, validateBookingTime, async (req, res) => {
     const spotId = req.params.spotId;
@@ -436,7 +471,7 @@ router.get('/:spotId', async (req, res) => {
     }
 });
 
-
+//get all spots
 router.get('/', async (req, res) => {
     try {
         const spots = await Spot.findAll();
