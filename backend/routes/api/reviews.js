@@ -137,5 +137,26 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
     }
 });
 
+// Add an image to a review by review id
+router.post('/:reviewId/images', requireAuth, async (req, res) => {
+    const { reviewId } = req.params;
+    const { url } = req.body;
+
+    const review = await Review.findByPk(reviewId);
+    if (!review) {
+        return res.status(404).json({ message: "Review couldn't be found" });
+    }
+
+    const reviewImagesCount = await Reviewimage.count({ where: { reviewId } });
+    if (reviewImagesCount >= 10) {
+        return res.status(403).json({ message: "Maximum number of images for this review was reached" });
+    }
+
+    const newImage = await Reviewimage.create({ reviewId, url });
+
+    res.status(200).json({ id: newImage.id, url: newImage.url });
+
+});
+
 
 module.exports = router;

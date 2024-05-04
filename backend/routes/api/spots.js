@@ -156,26 +156,24 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 })
 
-// Get all reviews by spotId
 router.get('/:spotId/reviews', async (req, res) => {
-    // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     try {
         const { spotId } = req.params;
         const spot = await Spot.findByPk(spotId);
-        // console.log(spotId)
-        // console.log(spot)
         if (!spot) {
             return res.status(404).json({ message: "Spot couldn't be found" });
         }
+
         const reviews = await Review.findAll({
             where: { spotId },
             attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
             include: [
-                { model: User, attributes: ['id', 'firstName', 'lastName'] },
-                { model: ReviewImage, attributes: ['id', 'url'] }
+                { model: User, attributes: ['id', 'firstName', 'lastName'] }, // Include the User model
+                { model: ReviewImage, attributes: ['id', 'url'] } // Include the ReviewImage model
             ]
         });
-        console.log(reviews) //Error: Include unexpected. Element has to be either a Model, an Association or an object.
+
+        // Format the reviews data
         const formattedReviews = reviews.map(review => ({
             id: review.id,
             userId: review.userId,
@@ -199,7 +197,7 @@ router.get('/:spotId/reviews', async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(404).json({ message: "Spot couldn't be found" });
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
