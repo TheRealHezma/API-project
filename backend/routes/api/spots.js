@@ -156,6 +156,7 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 })
 
+//get reviews based on spot id
 router.get('/:spotId/reviews', async (req, res) => {
     try {
         const { spotId } = req.params;
@@ -168,12 +169,11 @@ router.get('/:spotId/reviews', async (req, res) => {
             where: { spotId },
             attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
             include: [
-                { model: User, attributes: ['id', 'firstName', 'lastName'] }, // Include the User model
-                { model: ReviewImage, attributes: ['id', 'url'] } // Include the ReviewImage model
+                { model: User, attributes: ['id', 'firstName', 'lastName'] },
+                { model: ReviewImage, attributes: ['id', 'url'] }
             ]
         });
 
-        // Format the reviews data
         const formattedReviews = reviews.map(review => ({
             id: review.id,
             userId: review.userId,
