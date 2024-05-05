@@ -67,6 +67,6 @@ module.exports = {
     options.tableName = 'Reviews';
     return queryInterface.bulkDelete(options, {
       userId: { [Op.in]: [1, 2, 3, 4] }
-    });
+    }, {});
   }
 };
