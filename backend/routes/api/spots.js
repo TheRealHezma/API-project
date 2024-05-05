@@ -216,10 +216,15 @@ router.put('/:spotId', requireAuth, validateSpotCreation, async (req, res) => {
     const userId = req.user.id;
     const { spotId } = req.params;
 
-    const spot = await Spot.findOne({ where: { id: spotId, ownerId: userId } });
+    const spot = await Spot.findOne({ where: { id: spotId } });
 
     if (!spot) {
         return res.status(404).json({ message: "Spot could not be found" });
+    }
+
+    // Check if the current user owns the spot
+    if (spot.ownerId !== userId) {
+        return res.status(403).json({ message: "You do not own this spot" });
     }
 
     const { address, city, state, country, name, description, price } = req.body;
@@ -281,38 +286,14 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 // create new spot
 router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        const validationErrors = errors.array().reduce((acc, error) => {
-            acc[error.param] = error.msg;
-            return acc;
-        }, {});
-        return res.status(400).json({ errors: validationErrors });
-    }
-
-    const { ownerId, address, city, state, country, lat, lng, name, description, price } = req.body;
-
-    try {
-        const newSpot = await Spot.create({
-            ownerId,
-            address,
-            city,
-            state,
-            country,
-            lat,
-            lng,
-            name,
-            description,
-            price
-        });
-
-        res.status(201).json(newSpot);
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+    let newSpot = await Spot.create({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
+    newSpot = newSpot.toJSON();
+    newSpot.lat = Number(newSpot.lat);
+    newSpot.lng = Number(newSpot.lng);
+    newSpot.price = Number(newSpot.price);
+    res.status(201).json(newSpot);
 });
-
 
 // Route for creating a new booking for a spot
 router.post('/:spotId/bookings', requireAuth, spotExists, validateBookingTime, async (req, res) => {
