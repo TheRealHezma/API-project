@@ -10,36 +10,34 @@ const { Op } = require('sequelize');
 
 const validateSpotCreation = [
     check('address')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('Street address is required'),
     check('city')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('City is required'),
     check('state')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('State is required'),
     check('country')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('Country is required'),
-    check('lat')
-        .exists()
-        .withMessage('Latitude is not valid'),
-    check('lng')
-        .exists()
-        .withMessage('Longitude is not valid'),
     check('name')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('Name is required')
         .isLength({ max: 50 })
         .withMessage('Name must be less than 50 characters'),
     check('description')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('Description is required'),
     check('price')
-        .exists()
+        .exists({ checkFalsy: true })
         .withMessage('Price per day is required'),
     handleValidationErrors
 ];
+
+
+
+
 
 const validateSpot = [
     check('review')
@@ -322,31 +320,36 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
-// create new spot
+
+
 router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
+    // Extract data from the request body
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-    // Check if any required fields are empty strings
-    if (address === '' || city === '' || state === '' || country === '') {
-        const errors = {
-            address: address === '' ? 'Street address is required' : null,
-            city: city === '' ? 'City is required' : null,
-            state: state === '' ? 'State is required' : null,
-            country: country === '' ? 'Country is required' : null,
-        };
-
-        return res.status(400).json({ errors });
+    // Check if there were validation errors
+    if (req.validationErrors && Object.keys(req.validationErrors).length > 0) {
+        return res.status(400).json({ errors: req.validationErrors });
     }
 
-    // Create the new spot
-    let newSpot = await Spot.create({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
-    newSpot = newSpot.toJSON();
-    newSpot.lat = Number(newSpot.lat);
-    newSpot.lng = Number(newSpot.lng);
-    newSpot.price = Number(newSpot.price);
+    // Further logic if all validations pass
 
-    // Return the created spot
-    res.status(201).json(newSpot);
+    // Create the new spot
+    try {
+        const newSpot = await Spot.create({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
+        // Optionally format the response data
+        const formattedSpot = {
+            ...newSpot.toJSON(),
+            lat: Number(newSpot.lat),
+            lng: Number(newSpot.lng),
+            price: Number(newSpot.price)
+        };
+        // Return the created spot
+        return res.status(201).json(formattedSpot);
+    } catch (error) {
+        // Handle database error
+        console.error('Error creating spot:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 // Route for creating a new booking for a spot
