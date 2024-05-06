@@ -227,9 +227,43 @@ router.put('/:spotId', requireAuth, validateSpotCreation, async (req, res) => {
         return res.status(403).json({ message: "You do not own this spot" });
     }
 
-    const { address, city, state, country, name, description, price } = req.body;
-    const lat = parseFloat(req.body.lat);
-    const lng = parseFloat(req.body.lng);
+    // Check if any required fields are empty strings
+    const { address, city, state, country, name, description, price, lat, lng } = req.body;
+
+    const errors = {};
+    if (!address) {
+        errors.address = "Street address is required";
+    }
+    if (!city) {
+        errors.city = "City is required";
+    }
+    if (!state) {
+        errors.state = "State is required";
+    }
+    if (!country) {
+        errors.country = "Country is required";
+    }
+    if (!name) {
+        errors.name = "Name must be less than 50 characters";
+    }
+    if (!description) {
+        errors.description = "Description is required";
+    }
+    if (!price) {
+        errors.price = "Price per day is required";
+    }
+    if (!lat || lat < -90 || lat > 90) {
+        errors.lat = "Latitude must be within -90 and 90";
+    }
+    if (!lng || lng < -180 || lng > 180) {
+        errors.lng = "Longitude must be within -180 and 180";
+    }
+    if (!Number.isFinite(Number(price)) || price <= 0) {
+        errors.price = "Price per day must be a positive number";
+    }
+    if (Object.keys(errors).length > 0) {
+        return res.status(400).json({ errors });
+    }
 
     await spot.update({
         address,
@@ -291,11 +325,27 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 // create new spot
 router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+    // Check if any required fields are empty strings
+    if (address === '' || city === '' || state === '' || country === '') {
+        const errors = {
+            address: address === '' ? 'Street address is required' : null,
+            city: city === '' ? 'City is required' : null,
+            state: state === '' ? 'State is required' : null,
+            country: country === '' ? 'Country is required' : null,
+        };
+
+        return res.status(400).json({ errors });
+    }
+
+    // Create the new spot
     let newSpot = await Spot.create({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
     newSpot = newSpot.toJSON();
     newSpot.lat = Number(newSpot.lat);
     newSpot.lng = Number(newSpot.lng);
     newSpot.price = Number(newSpot.price);
+
+    // Return the created spot
     res.status(201).json(newSpot);
 });
 
