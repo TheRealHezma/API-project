@@ -269,10 +269,15 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
     const { url, preview } = req.body;
 
     try {
-        const spot = await Spot.findOne({ where: { id: spotId, ownerId: userId } });
+        const spot = await Spot.findOne({ where: { id: spotId } });
 
         if (!spot) {
             return res.status(404).json({ message: "Spot couldn't be found" });
+        }
+
+        // Check if the user owns the spot
+        if (spot.ownerId !== userId) {
+            return res.status(403).json({ message: "Forbidden: You do not own this spot" });
         }
 
         const newImage = await SpotImage.create({ url, preview, spotId });
