@@ -331,20 +331,27 @@ router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
         return res.status(400).json({ errors: req.validationErrors });
     }
 
-    // Further logic if all validations pass
-
     // Create the new spot
     try {
         const newSpot = await Spot.create({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
-        // Optionally format the response data
-        const formattedSpot = {
-            ...newSpot.toJSON(),
+        // Format the response data
+        const creatingSpot = {
+            id: newSpot.id,
+            ownerId: newSpot.ownerId,
+            address: newSpot.address,
+            city: newSpot.city,
+            state: newSpot.state,
+            country: newSpot.country,
             lat: Number(newSpot.lat),
             lng: Number(newSpot.lng),
-            price: Number(newSpot.price)
+            name: newSpot.name,
+            description: newSpot.description,
+            price: Number(newSpot.price),
+            createdAt: newSpot.createdAt,
+            updatedAt: newSpot.updatedAt
         };
         // Return the created spot
-        return res.status(201).json(formattedSpot);
+        return res.status(201).json(creatingSpot);
     } catch (error) {
         // Handle database error
         console.error('Error creating spot:', error);
