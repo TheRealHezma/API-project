@@ -90,16 +90,19 @@ router.get('/current', requireAuth, async (req, res) => {
 
 //edit a review
 router.put('/:reviewId', requireAuth, async (req, res) => {
-    const userId = req.user.id; // Get the ID of the logged-in user
-    const { reviewId } = req.params;
+    const userId = req.user.id;
+    const { reviewId, spot } = req.params;
     const { review, stars } = req.body;
+
+    // if (spot.ownerId !== userId) {
+    //     return res.status(403).json({ message: "Forbidden" });
+    // }
 
     const existingReview = await Review.findByPk(reviewId);
     if (!existingReview) {
         return res.status(404).json({ message: "Review couldn't be found" });
     }
 
-    // Check if the logged-in user is the owner of the review
     if (existingReview.userId !== userId) {
         return res.status(403).json({ message: "Forbidden" });
     }
@@ -123,18 +126,20 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
 
 router.delete('/:reviewId', requireAuth, async (req, res) => {
     try {
+        const userId = req.user.id;
         const { reviewId } = req.params;
 
-        // Check if the review exists
         const existingReview = await Review.findByPk(reviewId);
         if (!existingReview) {
             return res.status(404).json({ message: "Review couldn't be found" });
         }
 
-        // Delete the review
+        if (existingReview.userId !== userId) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
         await existingReview.destroy();
 
-        // Return success message
         res.status(200).json({ message: "Review deleted successfully" });
     } catch (error) {
         console.error(error);
@@ -144,21 +149,32 @@ router.delete('/:reviewId', requireAuth, async (req, res) => {
 
 // Add an image to a review by review id
 router.post('/:reviewId/images', requireAuth, async (req, res) => {
-    const { reviewId } = req.params;
-    const { url } = req.body;
+    try {
+        const userId = req.user.id;
+        const { reviewId } = req.params;
+        const { url } = req.body;
 
-    const review = await Review.findByPk(reviewId);
-    if (!review) {
-        return res.status(404).json({ message: "Review couldn't be found" });
+        const review = await Review.findByPk(reviewId);
+        if (!review) {
+            return res.status(404).json({ message: "Review couldn't be found" });
+        }
+
+        if (review.userId !== userId) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
+        const reviewImagesCount = await Reviewimage.count({ where: { reviewId } });
+        if (reviewImagesCount >= 10) {
+            return res.status(403).json({ message: "Maximum number of images for this resource was reached" });
+        }
+
+        const newImage = await Reviewimage.create({ reviewId, url });
+
+        res.status(200).json({ id: newImage.id, url: newImage.url });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
-
-    const reviewImagesCount = await Reviewimage.count({ where: { reviewId } });
-    if (reviewImagesCount >= 10) {
-        return res.status(403).json({ message: "Maximum number of images for this resource was reached" });
-    }
-    const newImage = await Reviewimage.create({ reviewId, url });
-
-    res.status(200).json({ id: newImage.id, url: newImage.url });
 });
 
 

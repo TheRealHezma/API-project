@@ -319,7 +319,6 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
             return res.status(404).json({ message: "Spot couldn't be found" });
         }
 
-        // Check if the user owns the spot
         if (spot.ownerId !== userId) {
             return res.status(403).json({ message: "Forbidden" });
         }
@@ -335,25 +334,19 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 
 router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
-    // Extract data from the request body
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-    // Check if there were validation errors
     if (req.validationErrors && Object.keys(req.validationErrors).length > 0) {
         const errors = req.validationErrors;
 
-        // Add lat, lng, and price to the errors object
         errors.lat = lat;
         errors.lng = lng;
         errors.price = price;
 
         return res.status(400).json({ errors });
     }
-
-    // Create the new spot
     try {
         const newSpot = await Spot.create({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
-        // Format the response data
         const creatingSpot = {
             id: newSpot.id,
             ownerId: newSpot.ownerId,
@@ -369,16 +362,13 @@ router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
             createdAt: newSpot.createdAt,
             updatedAt: newSpot.updatedAt
         };
-        // Return the created spot
         return res.status(201).json(creatingSpot);
     } catch (error) {
-        // Handle database error
         console.error('Error creating spot:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-// Route for creating a new booking for a spot
 router.post('/:spotId/bookings', requireAuth, spotExists, validateBookingTime, async (req, res) => {
     const spotId = req.params.spotId;
     const { startDate, endDate } = req.body;
