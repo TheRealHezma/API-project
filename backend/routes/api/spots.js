@@ -262,7 +262,7 @@ router.put('/:spotId', requireAuth, validateSpotCreation, async (req, res) => {
     return res.status(200).json(responseSpot);
 });
 
-// Add image to spot based on spot id
+// Add img to spot based on spotid
 router.post('/:spotId/images', requireAuth, async (req, res) => {
     const userId = req.user.id;
     const { spotId } = req.params;
@@ -283,7 +283,6 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
-
 // create new spot
 router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
