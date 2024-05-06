@@ -90,12 +90,18 @@ router.get('/current', requireAuth, async (req, res) => {
 
 //edit a review
 router.put('/:reviewId', requireAuth, async (req, res) => {
+    const userId = req.user.id; // Get the ID of the logged-in user
     const { reviewId } = req.params;
     const { review, stars } = req.body;
 
     const existingReview = await Review.findByPk(reviewId);
     if (!existingReview) {
         return res.status(404).json({ message: "Review couldn't be found" });
+    }
+
+    // Check if the logged-in user is the owner of the review
+    if (existingReview.userId !== userId) {
+        return res.status(403).json({ message: "Forbidden: You are not the owner of this review" });
     }
 
     const errors = {};
@@ -113,7 +119,6 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
     await existingReview.update({ review, stars });
 
     res.status(200).json(existingReview);
-
 });
 
 router.delete('/:reviewId', requireAuth, async (req, res) => {

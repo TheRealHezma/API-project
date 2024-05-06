@@ -31,7 +31,19 @@ const validateSpotCreation = [
         .withMessage('Description is required'),
     check('price')
         .exists({ checkFalsy: true })
-        .withMessage('Price per day is required'),
+        .withMessage('Price per day is required')
+        .isFloat({ gt: 0 })
+        .withMessage('Price per day must be a positive number'),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .withMessage('Latitude is required')
+        .isFloat({ min: -90, max: 90 })
+        .withMessage('Latitude must be within -90 and 90'),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .withMessage('Longitude is required')
+        .isFloat({ min: -180, max: 180 })
+        .withMessage('Longitude must be within -180 and 180'),
     handleValidationErrors
 ];
 
@@ -328,7 +340,14 @@ router.post('/', requireAuth, validateSpotCreation, async (req, res) => {
 
     // Check if there were validation errors
     if (req.validationErrors && Object.keys(req.validationErrors).length > 0) {
-        return res.status(400).json({ errors: req.validationErrors });
+        const errors = req.validationErrors;
+
+        // Add lat, lng, and price to the errors object
+        errors.lat = lat;
+        errors.lng = lng;
+        errors.price = price;
+
+        return res.status(400).json({ errors });
     }
 
     // Create the new spot
