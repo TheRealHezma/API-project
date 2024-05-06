@@ -234,7 +234,7 @@ router.put('/:spotId', requireAuth, validateSpotCreation, async (req, res) => {
 
     // Check if the current user owns the spot
     if (spot.ownerId !== userId) {
-        return res.status(403).json({ message: "You do not own this spot" });
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     // Check if any required fields are empty strings
@@ -321,7 +321,7 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
         // Check if the user owns the spot
         if (spot.ownerId !== userId) {
-            return res.status(403).json({ message: "Forbidden: You do not own this spot" });
+            return res.status(403).json({ message: "Forbidden" });
         }
 
         const newImage = await SpotImage.create({ url, preview, spotId });

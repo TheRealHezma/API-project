@@ -42,11 +42,17 @@ const { validationResult } = require('express-validator');
 
 // Route for deleting a spot image by its ID
 router.delete('/:imageId', requireAuth, async (req, res, next) => {
+    const userId = req.user.id; // Get the ID of the logged-in user
     const imageId = req.params.imageId;
     const spotImage = await SpotImage.findByPk(imageId);
 
     if (!spotImage) {
         return res.status(404).json({ message: "Spot image not found" });
+    }
+
+    // Check if the logged-in user is the owner of the image
+    if (spotImage.userId !== userId) {
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     await spotImage.destroy();

@@ -101,7 +101,7 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
 
     // Check if the logged-in user is the owner of the review
     if (existingReview.userId !== userId) {
-        return res.status(403).json({ message: "Forbidden: You are not the owner of this review" });
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     const errors = {};
