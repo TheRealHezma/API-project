@@ -1,0 +1,153 @@
+/* frontend/src/components/Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #d8e4eb52;
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand a {
+  text-decoration: none;
+  color: #343a40;
+  font-size: 1rem;
+}
+
+.navbar-logo {
+  width: 30%;
+  height: auto;
+}
+
+.navbar-links {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-button {
+  padding: 4px 2px;
+  margin-left: 0.5rem;
+  border: solid, gray;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.hamburger-button {
+  background-color: #f8f5f6;
+  opacity: 0.7;
+  color: #000;
+  max-width: 150px;
+  font-size: 2.1rem;
+  border-radius: 18px;
+}
+
+.navbar-button.hamburger-button {
+  font-size: 1.5rem;
+  padding: 0 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.hamburger-icon {
+  width: 24px;
+  height: auto;
+  margin-left: 15px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #f4f1f1;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  color: #343a40;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+/*/NavBar/ProfileButton.css */
+.profile-button-container {
+  position: relative;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 28px;
+  padding: 0 25px;
+  color: #3b2e30;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #f4f1f1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.profile-info {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.profile-dropdown-item {
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  color: #343a40;
+  display: block;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
+
+.profile-dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+
+/* styles for separate buttons login, logout and signup
+/* .login-button {
+  background-color: #28a745;
+}
+
+.logout-button {
+  background-color: #ff6600;
+}
+
+.signup-button {
+  background-color: #007bff;
+}
+
+.navbar-button:hover {
+  opacity: 0.8;
+} */
