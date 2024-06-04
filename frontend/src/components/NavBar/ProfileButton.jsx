@@ -9,21 +9,22 @@ import './NavBar.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  const [showMenu, setShowMenu] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false); // Unique state for profile dropdown
 
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
   };
 
-  const openMenu = () => {
-    if (showMenu) return;
-    setShowMenu(true);
+  const openMenu = (e) => {
+    e.stopPropagation(); // Prevent event propagation to parent elements
+    if (showProfileMenu) return;
+    setShowProfileMenu(true);
   };
 
   const closeMenu = () => {
-    if (!showMenu) return;
-    setShowMenu(false);
+    if (!showProfileMenu) return;
+    setShowProfileMenu(false);
   };
 
   return (
@@ -31,7 +32,7 @@ function ProfileButton({ user }) {
       <button onClick={openMenu} className="profile-button">
         <FaUserCircle />
       </button>
-      {showMenu && (
+      {showProfileMenu && (
         <ul className="profile-dropdown">
           <li className="profile-info">
             <div>{user.username}</div>
@@ -51,5 +52,5 @@ function ProfileButton({ user }) {
     </div>
   );
 }
- 
+
 export default ProfileButton;

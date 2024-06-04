@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import ProfileButton from './ProfileButton';
 import './NavBar.css';
 import logo from '../../../../images/airbnblogo.png';
-import hamburger from '../../../../images/airbnblogo.png';
+import rightSide from '../../../../images/airbnblogo.png';
 
 const NavBar = () => {
   //const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const NavBar = () => {
 
         <button className="navbar-brand navbar-button hamburger-button" onClick={handleMenuToggle}>
           {sessionUser && <ProfileButton user={sessionUser} />}
-          <img src={hamburger} alt="Menu" className="navbar-logo" />
+          <img src={rightSide} alt="Menu" className="navbar-logo" />
           {/* &#9776; */} {/* Unicode character for hamburger icon */}
         </button>
         {menuOpen && (
@@ -56,7 +56,7 @@ const NavBar = () => {
                   Home
                 </NavLink>
                 <NavLink to="/listing" className="dropdown-item" onClick={() => setMenuOpen(false)}>
-                  List Your Land
+                  Listing
                 </NavLink>
                 {/* <NavLink to="/" onClick={handleLogout} className="dropdown-item">
                   Logout
@@ -64,9 +64,9 @@ const NavBar = () => {
                 {/* <NavLink to="/profile" className="dropdown-item" onClick={() => setMenuOpen(false)}>
                   Profile
                 </NavLink> */}
-                <NavLink to="/bookings" className="dropdown-item" onClick={() => setMenuOpen(false)}>
+                {/* <NavLink to="/bookings" className="dropdown-item" onClick={() => setMenuOpen(false)}>
                   Bookings
-                </NavLink>
+                </NavLink> */}
               </>
             ) : (
               <>
