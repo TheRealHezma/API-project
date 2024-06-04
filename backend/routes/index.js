@@ -12,5 +12,9 @@ router.get("/api/csrf/restore", (req, res) => {
         'XSRF-Token': csrfToken
     });
 });
+router.post('/api/test', (req, res) => {
+    res.json({ requestBody: req.body });
+});
+
 
 module.exports = router;
