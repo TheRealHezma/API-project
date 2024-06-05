@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import LoginFormPage from './components/LoginFormPage';
+import LoginFormPage from './components/LoginFormModal';
 import SignupFormPage from './components/SignupFormPage';
 import NavBar from './components/NavBar';
 import * as sessionActions from './store/session';
@@ -19,7 +19,7 @@ function Layout() {
 
   return (
     <>
-      <NavBar />
+      <NavBar isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>
   );
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>,
+        element: <h1>Welcome!</h1>, //add the users name
       },
       {
         path: '/login',
