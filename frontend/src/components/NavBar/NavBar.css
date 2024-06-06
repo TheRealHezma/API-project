@@ -117,6 +117,7 @@
 .profile-info {
   padding: 0.75rem 1.5rem;
   border-bottom: 1px solid #ddd;
+  color: black
 }
 
 .profile-dropdown-item {
@@ -132,6 +133,33 @@
 
 .profile-dropdown-item:hover {
   background-color: #f1f1f1;
+}
+
+
+.navbar-button {
+  /* Common styles for all buttons - already defined */
+  padding: 4px 2px;
+  margin-left: 0.5rem;
+  border: solid, gray;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.login-button,
+.signup-button {
+  background-color: #f8f5f6;
+  /* Match Home button background */
+  color: #000;
+  /* Match Home button text color */
+}
+
+.login-button:hover,
+.signup-button:hover {
+  opacity: 0.8;
+  /* Match Home button hover effect */
 }
 
 /*//////////////////////////////////////////////////////////////
