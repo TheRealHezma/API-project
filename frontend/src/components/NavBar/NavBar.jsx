@@ -40,8 +40,13 @@ const NavBar = () => {
           <img src={logo} alt="Airbnb" className="navbar-logo" />
         </NavLink>
       </div>
+
       <div className="navbar-links">
-        <button className="navbar-brand navbar-button hamburger-button" onClick={handleMenuToggle}>
+        {sessionUser && (
+          <div className={`createspotlink`}>
+            <NavLink to="/spots/new" className={`create-spot-link`}>Create a New Spot</NavLink>
+          </div>
+        )}        <button className="navbar-brand navbar-button hamburger-button" onClick={handleMenuToggle}>
           {sessionUser && <ProfileButton user={sessionUser} />}
           <img src={rightSide} alt="Menu" className="navbar-logo" />
         </button>

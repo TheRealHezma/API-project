@@ -6,6 +6,9 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import NavBar from './components/NavBar/NavBar';
 import * as sessionActions from './store/session';
 import SpotsBrowser from "./components/Spots/SpotsBrowser";
+import CreateSpotForm from './components/Spots/CreateSpot';
+
+
 
 function Layout() {
   const dispatch = useDispatch();
@@ -32,7 +35,12 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <SpotsBrowser />
-      }
+      },
+      {
+        path: "spots/new",
+        element: <CreateSpotForm />
+      },
+
     ]
   }
 ]);

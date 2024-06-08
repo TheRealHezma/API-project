@@ -1,0 +1,163 @@
+/* frontend/src/components/Spots/CreateSpot.css */
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    max-width: 600px;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-spot-button {
+    display: inline-block;
+    width: fit-content;
+    background-color: #fd5c63;
+    color: white;
+    box-shadow: 2px 3px 5px black;
+    height: 30px;
+    margin-bottom: 30px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.input-box,
+.price-input-box,
+.description-box,
+.state-area .input-box,
+.lat-lng-area .input-box {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgb(201, 216, 236);
+    border: 2px black solid;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.errors {
+    color: #fd5c63;
+    font-size: 14px;
+    margin-top: -10px;
+}
+
+.description-box {
+    height: 100px;
+    resize: none;
+}
+
+p {
+    font-size: 13px;
+}
+
+input,
+textarea {
+    font-size: 13px;
+}
+
+.state-area,
+.lat-lng-area {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.state-area .input-box,
+.lat-lng-area .input-box {
+    flex: 1;
+}
+
+h2,
+h3 {
+    text-align: center;
+}
+
+
+/* .form-container {
+    display: flex;
+    margin: auto;
+    width: 500px;
+}
+
+.create-spot-button {
+    display: inline-block;
+    width: 100px;
+    background-color: #fd5c63;
+    color: white;
+    box-shadow: 2px 3px 5px black;
+    width: fit-content;
+    height: 30px;
+    margin-bottom: 30px;
+}
+
+.update-spot-button {
+    display: inline-block;
+    width: 100px;
+    background-color: #fd5c63;
+    color: white;
+    box-shadow: 2px 3px 5px black;
+    width: fit-content;
+    height: 30px;
+    margin-bottom: 30px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+}
+
+.input-box {
+    width: 500px;
+    box-sizing: border-box;
+    background-color: rgb(201, 216, 236);
+    border: 2px black solid;
+    margin-bottom: 10px;
+}
+
+.price-input-box {
+    width: 485px;
+    box-sizing: border-box;
+    background-color: rgb(201, 216, 236);
+    border: 2px black solid;
+}
+
+.errors {
+    color: #fd5c63;
+    font-size: 14px;
+    margin-top: -10px;
+}
+
+.description-box {
+    display: flex;
+    width: 500px;
+    height: 100px;
+    box-sizing: border-box;
+    background-color: rgb(201, 216, 236);
+    border: 2px black solid;
+}
+
+p {
+    font-size: 13px;
+}
+
+input {
+    font-size: 13px;
+}
+
+textarea {
+    font-size: 13px;
+} */
