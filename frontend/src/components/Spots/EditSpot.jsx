@@ -1,15 +1,16 @@
-//frontend/src/components/Spots/CreateSpot.jsx
-
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { createSpot, createPreviewImg, createSpotImg } from '../../store/spots';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getSpotDetail, editSpot } from '../../store/spots';
 import './CreateSpot.css'
 
-const CreateSpotForm = () => {
+const EditSpotForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const sessionUser = useSelector(state => state.session.user);
+  const { id } = useParams();
+
+
   const [country, setCountry] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -45,6 +46,46 @@ const CreateSpotForm = () => {
 
 
   useEffect(() => {
+
+
+    //grab the spot details stored in db to prepopulate the form
+
+    dispatch(getSpotDetail(id)).then((response) => {
+
+      let otherImages = [];
+
+      if (response.SpotImages.length !== 0) {
+        for (const img of response.SpotImages) {
+          if (img.preview === true) {
+            response.previewImage = img.url
+          } else if (img.preview === false) {
+            otherImages.push(img.url)
+          }
+        }
+      }
+
+      let [savedSpotImg1, savedSpotImg2, savedSpotImg3, savedSpotImg4] = otherImages;
+
+      setCountry(response.country);
+      setAddress(response.address);
+      setCity(response.city);
+      setState(response.state);
+      setLatitude(response.lat);
+      setLongitude(response.lng);
+      setDescription(response.description);
+      setPrice(response.price);
+      setName(response.name);
+      setPreviewImg(response.previewImage);
+      setSpotImg1(savedSpotImg1);
+      setSpotImg2(savedSpotImg2);
+      setSpotImg3(savedSpotImg3);
+      setSpotImg4(savedSpotImg4);
+
+    })
+
+  }, [dispatch, id])
+
+  useEffect(() => {
     const errors = {};
 
     if (!country) errors.country = 'Country is required';
@@ -65,8 +106,9 @@ const CreateSpotForm = () => {
 
   }, [country, address, city, state, lat, lng, description, name, price, previewImg, spotImg1, spotImg2, spotImg3, spotImg4])
 
+
   if (sessionUser) {
-    const { id } = sessionUser
+    const ownerId = sessionUser.id;
 
 
     const handleSubmit = async (e) => {
@@ -78,7 +120,7 @@ const CreateSpotForm = () => {
       }
 
       const spotPayload = {
-        ownerId: id,
+        ownerId: ownerId,
         country,
         address,
         city,
@@ -94,72 +136,31 @@ const CreateSpotForm = () => {
       //   navigate(`/spots/${res.id}`)
       // })
 
-      let createdSpot = await (dispatch(createSpot(spotPayload)))
+      await (dispatch(editSpot(spotPayload, id))).then(() => {
+        navigate(`/spots/${id}`)
+      })
 
-      if (createdSpot) {
-        const id = createdSpot.id;
-
-        const previewPayload = {
-          spotId: id,
-          url: previewImg,
-          preview: true
-        }
-
-        // await (dispatch(createPreviewImg(previewPayload)));
-
-        dispatch(createPreviewImg(previewPayload)).then(() => {
-          let spotImages = [spotImg1, spotImg2, spotImg3, spotImg4]
-          for (const spotImg of spotImages) {
-            if (spotImg.length !== 0) {
-              const imgPayload = {
-                spotId: id,
-                url: spotImg,
-                preview: false
-              }
-              dispatch(createSpotImg(imgPayload))
-            }
-          }
-        }).then(() => {
-          navigate(`/spots/${id}`)
-        })
-
-      }
       setHasSubmitted(false);
-      setCountry("");
-      setAddress("");
-      setCity("");
-      setState("");
-      setLatitude("");
-      setLongitude("");
-      setDescription("");
-      setName("");
-      setPrice("");
-      setPreviewImg("");
-      setSpotImg1("")
-      setSpotImg2("")
-      setSpotImg3("");
-      setSpotImg4("")
     }
 
     return (
       <section className="form-container">
         <form className="create-spots-form" onSubmit={handleSubmit}>
-          <h2>Create a new Spot</h2>
+          <h2>Update your Spot</h2>
           <label>
             <h3>Where&apos;s your place located?</h3>
             <p>Guests will only get your exact address once they book a reservation.</p>
-            Country
+            Country {hasSubmitted === true && errors.country && <span className="errors">{errors.country}</span>}
+            <br></br>
             <input
               type="country"
               className="input-box"
               placeholder="Country"
               value={country}
               onChange={updateCountry} />
-          </label>
-          {hasSubmitted === true && errors.country && <div className="errors">{errors.country}</div>}
-          <br></br>
+          </label><br></br>
           <label>
-            Street Address
+            Street Address {hasSubmitted === true && errors.address && <span className="errors">{errors.address}</span>}
             <br></br>
             <input
               type="address"
@@ -168,67 +169,57 @@ const CreateSpotForm = () => {
               value={address}
               onChange={updateAddress} />
           </label>
-          {hasSubmitted === true && errors.address && <div className="errors">{errors.address}</div>}
           <br></br>
-          <div className={`state-area`}>
-            <div >
-              <label className={`city-label`}>
-                City
-                <input
-                  type="city"
-                  className="input-box city"
-                  placeholder="City"
-                  value={city}
-                  onChange={updateCity} />
-              </label>
-              {hasSubmitted === true && errors.city && <div className="errors">{errors.city}</div>}
-              <br></br>
-            </div>
-            <div >
-              <label>
-                State
-                <input
-                  type="city"
-                  className="input-box state"
-                  placeholder="STATE"
-                  value={state}
-                  onChange={updateState} />
-              </label>
-              {hasSubmitted === true && errors.state && <div className="errors">{errors.state}</div>}
-            </div>
-          </div>
-          <br></br>
-          <div className={`lat-lng-area`}>
-            <label>
-              Latitude
-              <input
-                type="latitude"
-                className="input-box lat"
-                placeholder="Latitude"
-                value={lat}
-                onChange={updateLatitude} />
-            </label>
-            {hasSubmitted === true && errors.lat && <div className="errors">{errors.lat}</div>}
+          <label>
+            City {hasSubmitted === true && errors.city && <span className="errors">{errors.city}</span>}
             <br></br>
-            <label>
-              Longitude
-              <input
-                type="longitude"
-                className="input-box lng"
-                placeholder="Longitude"
-                value={lng}
-                onChange={updateLongitude} />
-            </label>
-            <span></span>
-            {hasSubmitted === true && errors.lng && <div className="errors"> {errors.lng}</div>}
-          </div>
+            <input
+              type="city"
+              className="input-box"
+              placeholder="City"
+              value={city}
+              onChange={updateCity} />
+          </label>
           <br></br>
-          <hr className={`create-form`}></hr>
+          <label>
+            State
+            {hasSubmitted === true && errors.state && <span className="errors">{errors.state}</span>}
+            <br></br>
+            <input
+              type="city"
+              className="input-box"
+              placeholder="STATE"
+              value={state}
+              onChange={updateState} />
+          </label>
+          <br></br>
+          <label>
+            Latitude {hasSubmitted === true && errors.lat && <span className="errors">{errors.lat}</span>}
+            <br></br>
+            <input
+              type="latitude"
+              className="input-box"
+              placeholder="Latitude"
+              value={lat}
+              onChange={updateLatitude} />
+          </label>
+          <br></br>
+          <label>
+            Longitude {hasSubmitted === true && errors.lng && <span className="errors"> {errors.lng}</span>}
+            <br></br>
+            <input
+              type="longitude"
+              className="input-box"
+              placeholder="Longitude"
+              value={lng}
+              onChange={updateLongitude} />
+          </label>
+          <br></br>
           <label>
             <h3>Describe your place to guests</h3>
             <p>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</p>
             <textarea
-              placeholder='Please write at least 30 characters'
+              placeholder='Description'
               className="description-box"
               value={description}
               onChange={updateDescription}>
@@ -236,7 +227,7 @@ const CreateSpotForm = () => {
           </label>
           {hasSubmitted === true && errors.description && <span className="errors">{errors.description}</span>}
           <label>
-            <h3>Create a title for your spot</h3>
+            <h2>Create a title for your spot</h2>
             <p>Catch guests&apos; attention with a spot title that highlights what makes your place special.</p>
             <input
               type="text"
@@ -246,7 +237,7 @@ const CreateSpotForm = () => {
               onChange={updateName} />
           </label>
           <br></br>
-          {hasSubmitted === true && errors.name && <div className="errors">{errors.name}</div>}
+          {hasSubmitted === true && errors.name && <span className="errors">{errors.name}</span>}
           <label>
             <h3>Set a base price for your spot</h3>
             <p>Competitive pricing can help your listing stand out and rank higher in search results</p>
@@ -268,7 +259,8 @@ const CreateSpotForm = () => {
               placeholder="Preview Image URL"
               value={previewImg}
               onChange={updatePreview} />
-            {hasSubmitted === true && errors.previewImg && <div className="errors">{errors.previewImg}</div>}
+            {hasSubmitted === true && errors.previewImg && <span className="errors">{errors.previewImg}</span>}
+            <br></br>
             <br></br>
             <input
               type="text"
@@ -277,6 +269,8 @@ const CreateSpotForm = () => {
               value={spotImg1}
               onChange={updateSpotImg1} />
             {hasSubmitted === true && errors.spotImg1 && <span className="errors">{errors.spotImg1}</span>}
+            <br></br>
+            <br></br>
             <input
               type="text"
               className="input-box"
@@ -284,6 +278,8 @@ const CreateSpotForm = () => {
               value={spotImg2}
               onChange={updateSpotImg2} />
             {hasSubmitted === true && errors.spotImg2 && <span className="errors">{errors.spotImg2}</span>}
+            <br></br>
+            <br></br>
             <input
               type="text"
               className="input-box"
@@ -291,6 +287,8 @@ const CreateSpotForm = () => {
               value={spotImg3}
               onChange={updateSpotImg3} />
             {hasSubmitted === true && errors.spotImg13 && <span className="errors">{errors.spotImg3}</span>}
+            <br></br>
+            <br></br>
             <input
               type="text"
               className="input-box"
@@ -299,8 +297,10 @@ const CreateSpotForm = () => {
               onChange={updateSpotImg4} />
             {hasSubmitted === true && errors.spotImg4 && <span className="errors">{errors.spotImg4}</span>}
           </label>
+          <br></br>
+          <br></br>
           <div className={`input-container`}>
-            <button onClick={handleSubmit} className={`create-spot-button`} type="submit">Create Spot</button>
+            <button onClick={handleSubmit} className={`update-spot-button`} type="submit">Update your Spot</button>
           </div>
         </form>
       </section>
@@ -311,4 +311,4 @@ const CreateSpotForm = () => {
 
 }
 
-export default CreateSpotForm;
+export default EditSpotForm;

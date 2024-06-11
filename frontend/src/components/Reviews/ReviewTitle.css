@@ -1,0 +1,19 @@
+.reviewitem {
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid rgb(88, 84, 42);
+}
+
+
+.review-user {
+    font-size: 17px
+}
+
+.review-date{
+    font-size: 16px;
+    color: grey
+}
+
+.review-body{
+    font-size: 15px
+}

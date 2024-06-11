@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getCurrentUserSpots } from '../store/spots.js';
+import { getCurrentUserSpots } from '../../store/spots.js';
 import SpotTile from './SpotTile.jsx';
 import './SpotTile.css'
 import { useNavigate } from 'react-router-dom';
-import OpenModalButton from './DeleteSpotModal/OpenModalDeleteSpot';
-import DeleteSpotModal from './DeleteSpotModal/DeleteSpotModal';
+import OpenModalButton from '../DeleteSpotModal/OpenModalDeleteSpot.jsx';
+import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
 
 
 function ManageSpotsBrowser() {
