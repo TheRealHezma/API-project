@@ -1,4 +1,61 @@
+/* frontend/src/components/Reviews/PostReviewModal.css */
+
+
 .review-modal {
+    padding: 20px;
+    height: 300px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 1px;
+    border: 4px solid rgb(0, 0, 0);
+}
+
+.text-area {
+    width: 100%;
+    background-color: rgb(201, 216, 236);
+    border: 2px solid black;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+button:enabled.submit-review-button {
+    background-color: #fd5c63;
+    color: white;
+    box-shadow: 2px 3px 5px black;
+    width: 100%;
+    height: 40px;
+}
+
+button:disabled.submit-review-button {
+    background-color: white;
+    color: rgb(131, 129, 129);
+    box-shadow: 1px 1px 3px black;
+    width: 100%;
+    height: 40px;
+}
+
+.star-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.star {
+    font-size: 35px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.errors {
+    color: red;
+    margin-bottom: 20px;
+}
+
+
+
+/* .review-modal {
     padding: 20px;
     height: 300px;
     width: 300px;
@@ -44,4 +101,4 @@ button:disabled.submit-review-button{
 
 .star {
     font-size: 35px;;
-}
+} */
