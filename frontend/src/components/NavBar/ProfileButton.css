@@ -24,3 +24,37 @@
     padding: 1px;
     border-bottom: none;
 }
+
+
+
+/* .menu-items:hover {
+    cursor: pointer;
+}
+
+.both-icons:hover {
+    cursor: pointer;
+}
+
+.login-dropdown {
+    cursor: pointer
+}
+
+.signup-dropdown {
+    cursor: pointer
+}
+
+.login-dropdown {
+
+    padding: 1px;
+    border-top: none;
+}
+
+.signup-dropdown {
+    padding: 1px;
+    border-bottom: none;
+}
+
+.profile-dropdown-item:hover,
+.profile-dropdown-item button:hover {
+    cursor: pointer;
+} */
