@@ -75,7 +75,7 @@ function SpotDetail() {
                                 </span>
                             </div>
                             <div className="reserve-area">
-                                <button onClick={() => alert("Feature coming soon. To support a developer, Zelle: (216) 338-2418")} className="reserve-button">Reserve</button>
+                                <button onClick={() => alert("Feature coming soon. To support a developer, Zelle: (216) 338-2418  :)")} className="reserve-button">Reserve</button>
                             </div>
                         </div>
                     </div>

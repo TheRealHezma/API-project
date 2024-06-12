@@ -1,0 +1,83 @@
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.spots-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* Explicitly set 4 columns */
+    gap: 16px;
+    padding: 0 20px;
+    justify-items: center;
+    max-width: 1200px;
+    /* To limit the grid to a maximum of 4 spots across */
+    margin: 0 auto;
+    /* Center the grid within the container */
+}
+
+.spot-item {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.spot-tile-wrapper .spot-tile {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* Maintain square shape */
+}
+
+.buttons-area {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+}
+
+.update-button,
+.delete-button {
+    flex: 1;
+    margin: 0 4px;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.update-button {
+    background-color: #2196F3;
+    color: white;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.update-button:hover,
+.delete-button:hover {
+    opacity: 0.8;
+}
+
+.create-spots-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.create-spots-button:hover {
+    opacity: 0.8;
+}

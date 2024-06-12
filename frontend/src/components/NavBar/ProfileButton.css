@@ -25,6 +25,10 @@
     border-bottom: none;
 }
 
+.profile-dropdown-item:hover,
+.profile-dropdown-item button:hover {
+    cursor: pointer;
+}
 
 
 /* .menu-items:hover {
