@@ -12,7 +12,7 @@ function OpenModalButton({
   };
 
   return (
-        <button className={`delete-button`} onClick={onClick}>Delete</button>
+    <button className={`delete-button`} onClick={onClick}>Delete</button>
   );
 }
 

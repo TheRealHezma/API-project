@@ -1,0 +1,36 @@
+src/components/Reviews/EditReviewModal.css .edit-review-modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-review-modal h2 {
+    margin-bottom: 20px;
+}
+
+.edit-review-modal form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-review-modal form ul {
+    color: rgb(55, 0, 255);
+    margin-bottom: 10px;
+}
+
+.edit-review-modal form textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.edit-review-modal form input[type="number"] {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.edit-review-modal form button {
+    margin: 5px;
+}

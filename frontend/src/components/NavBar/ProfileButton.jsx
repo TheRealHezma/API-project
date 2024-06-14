@@ -136,11 +136,11 @@ function ProfileButton({ user }) {
             <div>{user.firstName} {user.lastName}</div>
             <div>{user.email}</div>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/profile" className="profile-dropdown-item" onClick={closeMenu}>
               Profile
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <NavLink to="/spots/current" className="profile-dropdown-item" onClick={closeMenu}>
               Manage Spots

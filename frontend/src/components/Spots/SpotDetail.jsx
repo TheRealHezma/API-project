@@ -1,6 +1,7 @@
 // //frontend/src/components/Spots/SpotDetail.jsx
 
-import { useEffect } from "react";
+
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getSpotDetail } from "../../store/spots";
@@ -8,6 +9,7 @@ import { getCurrentSpotReviews } from "../../store/reviews";
 import ReviewTitle from "../Reviews/ReviewTitle";
 import OpenModalReviewButton from "../Reviews/OpenModalReviewButton";
 import PostReviewModal from "../Reviews/PostReviewModal";
+// import EditReviewModal from "../Reviews/EditReviewModal";
 import './SpotDetail.css';
 
 function SpotDetail() {
@@ -28,13 +30,17 @@ function SpotDetail() {
     const img3 = filteredImages?.[2]?.url;
     const img4 = filteredImages?.[3]?.url;
 
+
     useEffect(() => {
         const fetchData = async () => {
             await dispatch(getSpotDetail(id));
             await dispatch(getCurrentSpotReviews(id));
+            // console.log("Fetched reviews: ", getCurrentSpotReviews) //testing
         };
         fetchData();
     }, [id, dispatch]);
+
+    // console.log("Reviews before rendering: ", reviews); //testing
 
     return (
         <div className="overallContainer">

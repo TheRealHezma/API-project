@@ -57,9 +57,9 @@ const NavBar = () => {
                 <NavLink to="/" className="dropdown-item" onClick={() => setMenuOpen(false)}>
                   Home
                 </NavLink>
-                <NavLink to="/listing" className="dropdown-item" onClick={() => setMenuOpen(false)}>
+                {/* <NavLink to="/listing" className="dropdown-item" onClick={() => setMenuOpen(false)}>
                   Listing
-                </NavLink>
+                </NavLink> */}
               </>
             ) : (
               <>

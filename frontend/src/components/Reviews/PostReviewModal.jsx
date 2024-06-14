@@ -25,7 +25,7 @@ function PostReviewModal({ spotId }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting review..."); // Debugging log
+        console.log("Submitting review..."); // Debugging
 
         const payload = {
             userId: sessionUser.id,
@@ -35,16 +35,11 @@ function PostReviewModal({ spotId }) {
         };
 
         try {
-            // Dispatch createReview thunk to add new review
             await dispatch(createReview(payload, spotId));
-            // Dispatch getCurrentSpotReviews to fetch updated reviews for the current spot
             await dispatch(getCurrentSpotReviews(spotId));
-            // Dispatch getSpotDetail to fetch updated spot details
             await dispatch(getSpotDetail(spotId));
-            // Close the modal
             closeModal();
         } catch (error) {
-            // Handle errors if any
             if (error && error.message) {
                 setErrors({ message: error.message });
             }
@@ -76,7 +71,6 @@ function PostReviewModal({ spotId }) {
                 Stars
             </div>
             <div className="buttons-area">
-                {/* Disable button if review is too short or rating is not selected */}
                 <button disabled={toggle()} className="submit-review-button" onClick={handleSubmit}>Submit Your Review</button>
             </div>
         </div>
