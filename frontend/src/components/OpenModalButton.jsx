@@ -20,6 +20,5 @@ function OpenModalButton({
     return <button onClick={onClick}>{deleteButton ? "Delete Review" : buttonText}</button>; //added
     // return <button onClick={onClick}>{buttonText}</button>;
 }
-console.log("HHHEEELOOOOOO", OpenModalButton)
 
 export default OpenModalButton;

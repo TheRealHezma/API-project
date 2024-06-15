@@ -25,7 +25,6 @@ function PostReviewModal({ spotId }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting review..."); // Debugging
 
         const payload = {
             userId: sessionUser.id,
