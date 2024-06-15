@@ -1,4 +1,5 @@
-src/components/Reviews/EditReviewModal.css .edit-review-modal {
+/* src/components/Reviews/EditReviewModal.css  */
+.edit-review-modal {
     display: flex;
     flex-direction: column;
     align-items: center;
