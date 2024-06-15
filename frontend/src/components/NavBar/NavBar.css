@@ -1,4 +1,7 @@
 /* frontend/src/components/Navbar.css */
+/**/
+
+/* frontend/src/components/NavBar/NavBar.css */
 
 .navbar {
   display: flex;
@@ -69,8 +72,8 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #f4f1f1;
-  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f0e9e9;
+  box-shadow: 0 10px 8px rgba(0, 0, 0);
   border-radius: 4px;
   overflow: hidden;
   z-index: 1000;
@@ -86,9 +89,27 @@
 
 .dropdown-item:hover {
   background-color: #f1f1f1;
+  text-decoration: underline;
 }
 
-/*/NavBar/ProfileButton.css */
+.dropdown-button {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-size: inherit;
+  color: #343a40;
+  cursor: pointer;
+}
+
+.dropdown-button:hover {
+  text-decoration: underline;
+  background-color: #f1f1f1;
+}
+
+/* ProfileButton.css */
 .profile-button-container {
   position: relative;
 }
@@ -107,7 +128,7 @@
   top: 100%;
   right: 0;
   background-color: #f4f1f1;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0);
   border-radius: 4px;
   overflow: hidden;
   z-index: 1000;
@@ -117,7 +138,7 @@
 .profile-info {
   padding: 0.75rem 1.5rem;
   border-bottom: 1px solid #ddd;
-  color: black
+  color: black;
 }
 
 .profile-dropdown-item {
@@ -134,50 +155,3 @@
 .profile-dropdown-item:hover {
   background-color: #f1f1f1;
 }
-
-
-.navbar-button {
-  /* Common styles for all buttons - already defined */
-  padding: 4px 2px;
-  margin-left: 0.5rem;
-  border: solid, gray;
-  border-radius: 5px;
-  text-decoration: none;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.login-button,
-.signup-button {
-  background-color: #f8f5f6;
-  /* Match Home button background */
-  color: #000;
-  /* Match Home button text color */
-}
-
-.login-button:hover,
-.signup-button:hover {
-  opacity: 0.8;
-  /* Match Home button hover effect */
-}
-
-/*//////////////////////////////////////////////////////////////
-
-
-/* styles for separate buttons login, logout and signup
-/* .login-button {
-  background-color: #28a745;
-}
-
-.logout-button {
-  background-color: #ff6600;
-}
-
-.signup-button {
-  background-color: #007bff;
-}
-
-.navbar-button:hover {
-  opacity: 0.8;
-} */

@@ -13,28 +13,28 @@ module.exports = {
     await SpotImage.bulkCreate([
       {
         spotId: 1,
-        url: 'https://test.com/image1.jpg',
+        url: 'https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png',
         preview: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         spotId: 2,
-        url: 'https://test.com/image2.jpg',
+        url: 'https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png',
         preview: false,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         spotId: 3,
-        url: 'https://test.com/image3.jpg',
+        url: 'https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png',
         preview: true,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         spotId: 4,
-        url: 'https://test.com/image4.jpg',
+        url: 'https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png',
         preview: true,
         createdAt: new Date(),
         updatedAt: new Date()

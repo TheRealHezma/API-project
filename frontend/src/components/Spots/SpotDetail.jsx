@@ -99,12 +99,12 @@ function SpotDetail() {
                             <br />Be the first to post a review!
                         </div>
                     )}
-                    {sessionUser && sessionUser.id !== spot?.ownerId && existingReview.length === 0 && reviews.length !== 0 && (
+                    {/* {sessionUser && sessionUser.id !== spot?.ownerId && existingReview.length === 0 && reviews.length !== 0 && (
                         <div>
                             <OpenModalReviewButton modalComponent={<PostReviewModal spotId={id} />} />
                             <br />
                         </div>
-                    )}
+                    )} */}
                 </div>
                 <div className="reviewscontainer">
                     {reviews && reviews.map((review) => (

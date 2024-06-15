@@ -141,14 +141,14 @@ function ProfileButton({ user }) {
               Profile
             </NavLink>
           </li> */}
-          <li>
+          <div>
             <NavLink to="/spots/current" className="profile-dropdown-item" onClick={closeMenu}>
               Manage Spots
             </NavLink>
-          </li>
-          <li>
+          </div>
+          <div>
             <button onClick={logout} className="profile-dropdown-item">Log Out</button>
-          </li>
+          </div>
         </ul>
       )}
     </div>
