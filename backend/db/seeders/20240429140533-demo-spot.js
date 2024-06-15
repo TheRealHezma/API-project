@@ -24,7 +24,7 @@ module.exports = {
         price: 204,
         createdAt: new Date(),
         updatedAt: new Date(),
-        previewImage: "http//imageurl.com",
+        previewImage: "https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png",
         avgRating: 5
 
       },
@@ -41,7 +41,7 @@ module.exports = {
         price: 202,
         createdAt: new Date(),
         updatedAt: new Date(),
-        previewImage: "https//imageurl.com",
+        previewImage: "https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png",
         avgRating: 5
 
       },
@@ -58,7 +58,7 @@ module.exports = {
         price: 203,
         createdAt: new Date(),
         updatedAt: new Date(),
-        previewImage: "https//imageurl.com",
+        previewImage: "https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png",
         avgRating: 5
 
       },
@@ -75,7 +75,7 @@ module.exports = {
         price: 204,
         createdAt: new Date(),
         updatedAt: new Date(),
-        previewImage: "https//imageurl.com",
+        previewImage: "https://e7.pngegg.com/pngimages/999/59/png-clipart-walt-disney-world-sleeping-beauty-castle-hong-kong-disneyland-tokyo-disneyland-the-walt-disney-company-tokyo-disney-castle-building-photography.png",
         avgRating: 5
 
       }
